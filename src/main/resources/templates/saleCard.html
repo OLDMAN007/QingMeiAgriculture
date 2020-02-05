@@ -68,6 +68,52 @@
             </div>
         </nav>
     </div>
+    <form class="form-horizontal" role="form" action="insertSale" method="get">
+        <div class="form-group">
+            <label for="commodityId" class="col-sm-2 control-label">商品名稱</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="commodityId" name="commodityId"
+                       placeholder="请選擇商品">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="quantity" class="col-sm-2 control-label">購買數量</label>
+            <div class="col-sm-8">
+                <input type="number" class="form-control" id="quantity" name="quantity"
+                       placeholder="请输入購買數量">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="price" class="col-sm-2 control-label">商品單價</label>
+            <div class="col-sm-8">
+                <input type="number" class="form-control" id="price" name="price"
+                       placeholder="请输入商品單價">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="measurement" class="col-sm-2 control-label">計量單位</label>
+            <div class="col-sm-8">
+                <select class="form-control" id="measurement" name="measurementId" >
+                    <option th:value="${info.id}" th:each="info,infoStat:${session.measurement}" th:text="${info.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="customerId" class="col-sm-2 control-label">顧客姓名</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="customerId" name="customerId"
+                       placeholder="请選擇顧客">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">保存</button>
+                <button type="reset" class="btn btn-default">清空</button>
+                <span class="success" th:text="${session.successCus}"></span>
+                <span class="error" th:text="${session.errorCus}"></span>
+            </div>
+        </div>
+    </form>
 </div>
 
 </body>

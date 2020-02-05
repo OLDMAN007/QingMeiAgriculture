@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.qingmei</groupId>
 	<artifactId>agriculture</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>agriculture</name>
 	<description>QingMeiAgriculture for Spring Boot</description>
 
@@ -76,6 +76,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

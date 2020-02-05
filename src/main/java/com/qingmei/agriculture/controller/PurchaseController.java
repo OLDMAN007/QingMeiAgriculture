@@ -1,14 +1,17 @@
 package com.qingmei.agriculture.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.qingmei.agriculture.entity.OrderStatus;
-import com.qingmei.agriculture.entity.Purchase;
+import com.qingmei.agriculture.entity.*;
+import com.qingmei.agriculture.repository.CommodityRepository;
+import com.qingmei.agriculture.repository.CustomerRepository;
+import com.qingmei.agriculture.repository.MeasurementRepository;
 import com.qingmei.agriculture.repository.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.UUID;
 
@@ -25,9 +28,18 @@ import java.util.UUID;
 public class PurchaseController {
     final
     PurchaseRepository purchaseRepository;
+    final
+    CommodityRepository commodityRepository;
+    final
+    CustomerRepository customerRepository;
+    final
+    MeasurementRepository measurementRepository;
 
-    public PurchaseController(PurchaseRepository purchaseRepository) {
+    public PurchaseController(PurchaseRepository purchaseRepository, CommodityRepository commodityRepository, CustomerRepository customerRepository, MeasurementRepository measurementRepository) {
         this.purchaseRepository = purchaseRepository;
+        this.commodityRepository = commodityRepository;
+        this.customerRepository = customerRepository;
+        this.measurementRepository = measurementRepository;
     }
 
     /**
@@ -57,13 +69,13 @@ public class PurchaseController {
                 purchase.setQuantity(quantity);
                 purchase.setMeasurementId(measurementId);
                 purchase.setDate(new Date());
-                if (status == 0){
-                    purchase.setStatus(OrderStatus.UNUSUAL);
-                } else if (status == 1){
+//                if (status == 0){
+//                    purchase.setStatus(OrderStatus.UNUSUAL);
+//                } else if (status == 1){
                     purchase.setStatus(OrderStatus.FINISH);
-                } else if (status == 2){
-                    purchase.setStatus(OrderStatus.RETURNS);
-                }
+//                } else if (status == 2){
+//                    purchase.setStatus(OrderStatus.RETURNS);
+//                }
 
                 purchaseRepository.save(purchase);
                 return true;
@@ -108,7 +120,34 @@ public class PurchaseController {
      * @return
      */
     @RequestMapping(value = "findAllPurchase")
-    public Iterable<Purchase> findAllPurchase(){
-        return purchaseRepository.findAll();
+    public String findAllPurchase(HttpSession session){
+        Iterable<Purchase> purchases = purchaseRepository.findAll();
+        Iterable<Commodity> commodities = commodityRepository.findAll();
+        Iterable<Measurement> measurements = measurementRepository.findAll();
+
+        for (Purchase purchase : purchases){
+            for (Commodity commodity : commodities){
+                if (purchase.getCommodityId().equals(commodity.getId())){
+                    purchase.setCommodityId(commodity.getComName());
+                }
+            }
+            for (Measurement measurement : measurements){
+                if (purchase.getMeasurementId().equals(measurement.getId().toString())){
+                    purchase.setMeasurementId(measurement.getName());
+                }
+            }
+        }
+
+        session.setAttribute("purchase", purchases);
+        return "purchaseList";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("purchaseCard")
+    public String purchaseCard(){
+        return "purchaseCard";
     }
 }

@@ -1,16 +1,17 @@
 package com.qingmei.agriculture.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.qingmei.agriculture.entity.Measurement;
-import com.qingmei.agriculture.entity.OrderStatus;
-import com.qingmei.agriculture.entity.Purchase;
-import com.qingmei.agriculture.entity.Sale;
+import com.qingmei.agriculture.entity.*;
+import com.qingmei.agriculture.repository.CommodityRepository;
+import com.qingmei.agriculture.repository.CustomerRepository;
+import com.qingmei.agriculture.repository.MeasurementRepository;
 import com.qingmei.agriculture.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,9 +28,18 @@ import java.util.UUID;
 public class SaleController {
     final
     SaleRepository saleRepository;
+    final
+    CommodityRepository commodityRepository;
+    final
+    CustomerRepository customerRepository;
+    final
+    MeasurementRepository measurementRepository;
 
-    public SaleController(SaleRepository saleRepository) {
+    public SaleController(SaleRepository saleRepository, CommodityRepository commodityRepository, CustomerRepository customerRepository, MeasurementRepository measurementRepository) {
         this.saleRepository = saleRepository;
+        this.commodityRepository = commodityRepository;
+        this.customerRepository = customerRepository;
+        this.measurementRepository = measurementRepository;
     }
 
     /**
@@ -40,11 +50,10 @@ public class SaleController {
      * @param price
      * @param customerId
      * @param measurementId
-     * @param status
      * @return
      */
     @RequestMapping(value = "insertSale")
-    public boolean insertSale(String code, String commodityId, int quantity, int price, String customerId, String measurementId, int status){
+    public boolean insertSale(String code, String commodityId, int quantity, int price, String customerId, String measurementId){
         try {
             if (!StrUtil.isBlank(commodityId) && quantity > 0 && price > 0 && !StrUtil.isBlank(customerId) && !StrUtil.isBlank(measurementId)){
                 if (StrUtil.isBlank(code)){
@@ -60,13 +69,13 @@ public class SaleController {
                 sale.setMeasurementId(measurementId);
                 sale.setCustomerId(customerId);
                 sale.setDate(new Date());
-                if (status == 0){
-                    sale.setStatus(OrderStatus.UNUSUAL);
-                } else if (status == 1){
+//                if (status == 0){
+//                    sale.setStatus(OrderStatus.UNUSUAL);
+//                } else if (status == 1){
                     sale.setStatus(OrderStatus.FINISH);
-                } else if (status == 2){
-                    sale.setStatus(OrderStatus.RETURNS);
-                }
+//                } else if (status == 2){
+//                    sale.setStatus(OrderStatus.RETURNS);
+//                }
 
                 saleRepository.save(sale);
                 return true;
@@ -111,7 +120,40 @@ public class SaleController {
      * @return
      */
     @RequestMapping(value = "findAllSale")
-    public Iterable<Sale> findAllSale(){
-        return saleRepository.findAll();
+    public String findAllSale(HttpSession session){
+        Iterable<Sale> sales = saleRepository.findAll();
+        Iterable<Commodity> commodities = commodityRepository.findAll();
+        Iterable<Customer> customers = customerRepository.findAll();
+        Iterable<Measurement> measurements = measurementRepository.findAll();
+
+        for (Sale sale : sales){
+            for (Commodity commodity : commodities){
+                if (sale.getCommodityId().equals(commodity.getId())){
+                    sale.setCommodityId(commodity.getComName());
+                }
+            }
+            for (Customer customer : customers){
+                if (sale.getCustomerId().equals(customer.getId())){
+                    sale.setCustomerId(customer.getCusName());
+                }
+            }
+            for (Measurement measurement : measurements){
+                if (sale.getMeasurementId().equals(measurement.getId().toString())){
+                    sale.setMeasurementId(measurement.getName());
+                }
+            }
+        }
+
+        session.setAttribute("sale", sales);
+        return "saleList";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("saleCard")
+    public String saleCard(){
+        return "saleCard";
     }
 }
