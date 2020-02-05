@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>commodity</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .main{
+            position: absolute;
+            left: 10%;
+            right: 10%;
+            transform: translate(0,0);
+        }
+        body{
+            background:url(image/indexBG.jpg)  no-repeat center center;
+            background-size:cover;
+            background-attachment:fixed;
+            #background-color:#CCCCCC;
+        }
+    </style>
+</head>
+<body>
+<div class="main" >
+    <dev>
+        <img src="image/logo.png" width="400px">
+    </dev>
+    <div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index">壽光慶美農資有限公司</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="purchaseCard">進貨</a> </li>
+                        <li><a href="saleCard">售貨</a> </li>
+                        <li><a href="customerCard">新增顧客</a></li>
+                        <li><a href="commodityCard">新增商品</a></li>
+                        <li><a href="measurementCard">新增計量單位</a> </li>
+                        <li class="dropdown active">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                維護管理
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="findAllPurchase">進貨信息</a> </li>
+                                <li><a href="findAllSale">售貨信息</a> </li>
+                                <li><a href="findAllCustomer">顧客信息</a></li>
+                                <li><a href="findAllCommodity">商品信息</a></li>
+                                <li><a href="findAllMeasurement">計量單位信息</a> </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                統計查詢
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">顧客購物信息查詢</a></li>
+                                <li><a href="#">商品銷售信息查詢</a></li>
+                                <li><a href="#">指定日期銷售數據</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <caption><h3>商品信息列表</h3></caption>
+            <thead>
+            <tr>
+                <th>序號</th>
+                <th>商品名稱</th>
+                <th>商品類別</th>
+                <th>庫存數量</th>
+                <th>計量單位</th>
+                <th>商品單價</th>
+                <th>商品備註</th>
+                <th>商品狀態</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="info,infoStat : ${session.commodity}">
+                <th th:text="${infoStat.count}"></th>
+                <td th:text="${info.comName}"></td>
+                <td th:text="${info.kind.name}"></td>
+                <td th:text="${info.quantity}"></td>
+                <td th:text="${info.measurement}"></td>
+                <td th:text="${info.price}"></td>
+                <td th:text="${info.note}"></td>
+                <td th:text="${info.status.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>customer</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .main{
+            position: absolute;
+            left: 10%;
+            right: 10%;
+            transform: translate(0,0);
+        }
+        body{
+            background:url(image/indexBG.jpg)  no-repeat center center;
+            background-size:cover;
+            background-attachment:fixed;
+            #background-color:#CCCCCC;
+        }
+        span.error{
+            color: red;
+        }
+        span.success{
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<div class="main" >
+    <dev>
+        <img src="image/logo.png" width="400px">
+    </dev>
+    <div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index">壽光慶美農資有限公司</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="purchaseCard">進貨</a> </li>
+                        <li><a href="saleCard">售貨</a> </li>
+                        <li class="active"><a href="customerCard">新增顧客</a></li>
+                        <li><a href="commodityCard">新增商品</a></li>
+                        <li><a href="measurementCard">新增計量單位</a> </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                維護管理
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="findAllPurchase">進貨信息</a> </li>
+                                <li><a href="findAllSale">售貨信息</a> </li>
+                                <li><a href="findAllCustomer">顧客信息</a></li>
+                                <li><a href="findAllCommodity">商品信息</a></li>
+                                <li><a href="findAllMeasurement">計量單位信息</a> </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                統計查詢
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">顧客購物信息查詢</a></li>
+                                <li><a href="#">商品銷售信息查詢</a></li>
+                                <li><a href="#">指定日期銷售數據</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <form class="form-horizontal" role="form" action="insertCustomer" method="get">
+        <div class="form-group">
+            <label for="cusCode" class="col-sm-2 control-label">顧客編號</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="cusCode" name="cusCode"
+                       placeholder="请输入編號">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="cusName" class="col-sm-2 control-label">顧客姓名</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="cusName" name="cusName"
+                       placeholder="请输入名字">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="telephone" class="col-sm-2 control-label">手機號碼</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="telephone" name="telephone"
+                       placeholder="请输入手機號碼">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address" class="col-sm-2 control-label">地址信息</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="address" name="address"
+                       placeholder="请输入地址信息">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">保存</button>
+                <button type="reset" class="btn btn-default">清空</button>
+                <span class="success" th:text="${session.successCus}"></span>
+                <span class="error" th:text="${session.errorCus}"></span>
+            </div>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
