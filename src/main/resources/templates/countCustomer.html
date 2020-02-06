@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>index</title>
+    <title>count</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -52,13 +52,13 @@
                                 <li><a href="findAllMeasurement">計量單位信息</a> </li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown active">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 統計查詢
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="countCustomer">顧客購物信息查詢</a></li>
+                                <li class="active"><a href="countCustomer">顧客購物信息查詢</a></li>
                                 <li><a href="countCommodity">商品銷售信息查詢</a></li>
                                 <li><a href="countDate">指定日期銷售數據</a></li>
                             </ul>
@@ -67,6 +67,57 @@
                 </div>
             </div>
         </nav>
+    </div>
+    <div>
+        <form class="form-horizontal" role="form" action="getCustomerSales" method="get">
+            <div class="form-group">
+                <label for="startDate" class="col-sm-1 control-label">起始日期</label>
+                <div class="col-sm-2">
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+                <label for="endDate" class="col-sm-1 control-label">截止日期</label>
+                <div class="col-sm-2">
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <label for="cusName" class="col-sm-1 control-label">顧客姓名</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="cusName" name="cusName"
+                           placeholder="请输入名字">
+                </div>
+                <div class="col-sm-offset-1 col-sm-2">
+                    <button type="submit" class="btn btn-default">篩選</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <caption><h3>交易信息列表</h3></caption>
+            <thead>
+            <tr>
+                <th>序號</th>
+                <th>商品名稱</th>
+                <th>庫存數量</th>
+                <th>計量單位</th>
+                <th>商品單價</th>
+                <th>交易金額</th>
+                <th>顧客姓名</th>
+                <th>交易時間</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="info,infoStat : ${session.countCustomer}">
+                <th th:text="${infoStat.count}"></th>
+                <td th:text="${info.comName}"></td>
+                <td th:text="${info.quantity}"></td>
+                <td th:text="${info.measurement}"></td>
+                <td th:text="${info.price}"></td>
+                <td th:text="${info.price} * ${info.quantity}"></td>
+                <td th:text="${info.cusName}"></td>
+                <td th:text="${info.date}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

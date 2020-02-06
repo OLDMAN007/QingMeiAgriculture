@@ -44,7 +44,8 @@ public interface CountRepository extends CrudRepository<Sale, String> {
                     "left join customer on sale.customer_id = customer.id " +
                     "left join commodity on sale.commodity_id = commodity.id " +
                     "left join measurement on commodity.measurement = measurement.id " +
-                    "where sale.date >= ?1 and sale.date <= ?2 and sale.status = 1 and customer.cus_name = ?3 ")
+                    "where sale.date >= ?1 and sale.date <= ?2 and sale.status = 1 and customer.cus_name = ?3 " +
+                    "order by date desc,cusName,comName")
     List<CountInfo> countCustomer(String startDate, String endDate, String cusName);
 
     @Query(nativeQuery = true,
@@ -53,7 +54,8 @@ public interface CountRepository extends CrudRepository<Sale, String> {
                     "left join customer on sale.customer_id = customer.id " +
                     "left join commodity on sale.commodity_id = commodity.id " +
                     "left join measurement on commodity.measurement = measurement.id " +
-                    "where sale.date >= ?1 and sale.date <= ?2 and sale.status = 1 and commodity.com_name = ?3")
+                    "where sale.date >= ?1 and sale.date <= ?2 and sale.status = 1 and commodity.com_name = ?3 " +
+                    "order by date desc,cusName,comName")
     List<CountInfo> countCommodity(String startDate, String endDate, String comName);
 
     @Query(nativeQuery = true,
@@ -62,6 +64,7 @@ public interface CountRepository extends CrudRepository<Sale, String> {
                     "left join customer on sale.customer_id = customer.id " +
                     "left join commodity on sale.commodity_id = commodity.id " +
                     "left join measurement on commodity.measurement = measurement.id " +
-                    "where sale.date >= ?1 and sale.date <= ?2 and sale.status = 1")
+                    "where sale.date >= ?1 and sale.date <= ?2 and sale.status = 1 " +
+                    "order by date desc,cusName,comName")
     List<CountInfo> countDate(String startDate, String endDate);
 }

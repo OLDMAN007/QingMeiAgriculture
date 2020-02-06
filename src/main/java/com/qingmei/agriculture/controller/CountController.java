@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -37,9 +38,13 @@ public class CountController {
      * @return
      */
     @RequestMapping(value = "getCustomerSales")
-    public List<CountInfo> getCustomerSales(String startDate, String endDate, String cusName){
+    public String getCustomerSales(String startDate, String endDate, String cusName, HttpSession session){
         try {
-            return countRepository.countCustomer(startDate, endDate, cusName);
+            startDate = startDate + " 00:00:00";
+            endDate = endDate + " 23:59:59";
+            List<CountInfo> countCustomer = countRepository.countCustomer(startDate, endDate, cusName);
+            session.setAttribute("countCustomer", countCustomer);
+            return "countCustomer";
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -54,9 +59,13 @@ public class CountController {
      * @return
      */
     @RequestMapping(value = "getCommoditySales")
-    public List<CountInfo> getCommoditySales(String startDate, String endDate, String comName){
+    public String getCommoditySales(String startDate, String endDate, String comName, HttpSession session){
         try {
-            return countRepository.countCommodity(startDate, endDate, comName);
+            startDate = startDate + " 00:00:00";
+            endDate = endDate + " 23:59:59";
+            List<CountInfo> countCommodity = countRepository.countCommodity(startDate, endDate, comName);
+            session.setAttribute("countCommodity", countCommodity);
+            return "countCommodity";
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -70,12 +79,43 @@ public class CountController {
      * @return
      */
     @RequestMapping(value = "getDateSales")
-    public List<CountInfo> getDateSales(String startDate, String endDate){
+    public String getDateSales(String startDate, String endDate, HttpSession session){
         try {
-            return countRepository.countDate(startDate, endDate);
+            startDate = startDate + " 00:00:00";
+            endDate = endDate + " 23:59:59";
+            List<CountInfo> countDate = countRepository.countDate(startDate, endDate);
+            session.setAttribute("countDate",countDate);
+            return "countDate";
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("countCommodity")
+    public String countCommodity(){
+        return "countCommodity";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("countCustomer")
+    public String countCustomer(){
+        return "countCustomer";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("countDate")
+    public String countDate(){
+        return "countDate";
     }
 }
