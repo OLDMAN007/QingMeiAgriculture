@@ -1,7 +1,11 @@
 package com.qingmei.agriculture.controller;
 
+import com.qingmei.agriculture.entity.Commodity;
+import com.qingmei.agriculture.entity.Customer;
+import com.qingmei.agriculture.repository.CommodityRepository;
 import com.qingmei.agriculture.repository.CountInfo;
 import com.qingmei.agriculture.repository.CountRepository;
+import com.qingmei.agriculture.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +29,15 @@ public class CountController {
 
     final
     CountRepository countRepository;
+    final
+    CommodityRepository commodityRepository;
+    final
+    CustomerRepository customerRepository;
 
-    public CountController(CountRepository countRepository) {
+    public CountController(CountRepository countRepository, CommodityRepository commodityRepository, CustomerRepository customerRepository) {
         this.countRepository = countRepository;
+        this.commodityRepository = commodityRepository;
+        this.customerRepository = customerRepository;
     }
 
     /**
@@ -97,7 +107,9 @@ public class CountController {
      * @return
      */
     @RequestMapping("countCommodity")
-    public String countCommodity(){
+    public String countCommodity(HttpSession session){
+        Iterable<Commodity> commodities = commodityRepository.findAll();
+        session.setAttribute("commodity", commodities);
         return "countCommodity";
     }
 
@@ -106,7 +118,9 @@ public class CountController {
      * @return
      */
     @RequestMapping("countCustomer")
-    public String countCustomer(){
+    public String countCustomer(HttpSession session){
+        Iterable<Customer> customers = customerRepository.findAll();
+        session.setAttribute("customer", customers);
         return "countCustomer";
     }
 
@@ -118,4 +132,5 @@ public class CountController {
     public String countDate(){
         return "countDate";
     }
+
 }

@@ -81,8 +81,11 @@
                 </div>
                 <label for="comName" class="col-sm-1 control-label">商品名稱</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="comName" name="comName"
-                           placeholder="请输入姓">
+<!--                    <input type="text" class="form-control" id="comName" name="comName"-->
+<!--                           placeholder="请输入姓">-->
+                    <select class="form-control" id="comName" name="comName">
+                        <option th:value="${info.id}" th:each="info,infoState:${session.commodity}" th:text="${info.comName}"></option>
+                    </select>
                 </div>
                 <div class="col-sm-offset-1 col-sm-2">
                     <button type="submit" class="btn btn-default">篩選</button>

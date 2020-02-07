@@ -1,6 +1,7 @@
 package com.qingmei.agriculture.repository;
 
 import com.qingmei.agriculture.entity.Commodity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

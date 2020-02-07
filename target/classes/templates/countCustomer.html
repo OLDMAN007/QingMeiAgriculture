@@ -81,8 +81,11 @@
                 </div>
                 <label for="cusName" class="col-sm-1 control-label">顧客姓名</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="cusName" name="cusName"
-                           placeholder="请输入名字">
+<!--                    <input type="text" class="form-control" id="cusName" name="cusName"-->
+<!--                           placeholder="请输入名字">-->
+                    <select class="form-control" id="cusName" name="cusName">
+                        <option th:value="${info.id}" th:each="info,infoState:${session.customer}" th:text="${info.cusName}"></option>
+                    </select>
                 </div>
                 <div class="col-sm-offset-1 col-sm-2">
                     <button type="submit" class="btn btn-default">篩選</button>

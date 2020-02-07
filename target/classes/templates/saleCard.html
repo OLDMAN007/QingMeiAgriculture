@@ -19,6 +19,12 @@
             background-attachment:fixed;
             #background-color:#CCCCCC;
         }
+        span.error{
+            color: red;
+        }
+        span.success{
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -72,8 +78,11 @@
         <div class="form-group">
             <label for="commodityId" class="col-sm-2 control-label">商品名稱</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="commodityId" name="commodityId"
-                       placeholder="请選擇商品">
+<!--                <input type="text" class="form-control" id="commodityId" name="commodityId"-->
+<!--                       placeholder="请選擇商品">-->
+                <select class="form-control" id="commodityId" name="commodityId">
+                    <option th:value="${info.id}" th:each="info,infoState:${session.commodity}" th:text="${info.comName}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -101,16 +110,19 @@
         <div class="form-group">
             <label for="customerId" class="col-sm-2 control-label">顧客姓名</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="customerId" name="customerId"
-                       placeholder="请選擇顧客">
+<!--                <input type="text" class="form-control" id="customerId" name="customerId"-->
+<!--                       placeholder="请選擇顧客">-->
+                <select class="form-control" id="customerId" name="customerId">
+                    <option th:value="${info.id}" th:each="info,infoState:${session.customer}" th:text="${info.cusName}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">保存</button>
                 <button type="reset" class="btn btn-default">清空</button>
-                <span class="success" th:text="${session.successCus}"></span>
-                <span class="error" th:text="${session.errorCus}"></span>
+                <span class="success" th:text="${session.successInsertSale}"></span>
+                <span class="error" th:text="${session.errorInsertSale}"></span>
             </div>
         </div>
     </form>

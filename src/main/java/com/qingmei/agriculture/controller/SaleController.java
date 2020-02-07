@@ -53,7 +53,7 @@ public class SaleController {
      * @return
      */
     @RequestMapping(value = "insertSale")
-    public boolean insertSale(String code, String commodityId, int quantity, int price, String customerId, String measurementId){
+    public String insertSale(String code, String commodityId, int quantity, int price, String customerId, String measurementId, HttpSession session){
         try {
             if (!StrUtil.isBlank(commodityId) && quantity > 0 && price > 0 && !StrUtil.isBlank(customerId) && !StrUtil.isBlank(measurementId)){
                 if (StrUtil.isBlank(code)){
@@ -78,13 +78,16 @@ public class SaleController {
 //                }
 
                 saleRepository.save(sale);
-                return true;
+                session.setAttribute("successInsertSale", "保存成功！");
+                return "saleCard";
             } else {
-                return false;
+                session.setAttribute("errorInsertSale", "保存失敗！");
+                return "saleCard";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            session.setAttribute("errorInsertSale", "保存失敗！");
+            return "saleCard";
         }
     }
 
@@ -153,7 +156,13 @@ public class SaleController {
      * @return
      */
     @RequestMapping("saleCard")
-    public String saleCard(){
+    public String saleCard(HttpSession session){
+        Iterable<Commodity> commodities = commodityRepository.findAll();
+        Iterable<Measurement> measurements = measurementRepository.findAll();
+        Iterable<Customer> customers = customerRepository.findAll();
+        session.setAttribute("measurement", measurements);
+        session.setAttribute("commodity", commodities);
+        session.setAttribute("customer", customers);
         return "saleCard";
     }
 }

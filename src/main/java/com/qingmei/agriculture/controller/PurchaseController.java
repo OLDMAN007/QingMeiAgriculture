@@ -44,17 +44,15 @@ public class PurchaseController {
 
     /**
      * 新增進貨訂單
-     * @param id
      * @param code
      * @param commodityId
      * @param quantity
      * @param measurementId
      * @param price
-     * @param status
      * @return
      */
     @RequestMapping(value = "insertPurchase")
-    public boolean insertPurchase(String id, String code, String commodityId, int quantity, String measurementId, int price, int status){
+    public String insertPurchase(String code, String commodityId, int quantity, String measurementId, int price, HttpSession session){
         try {
             if (!StrUtil.isBlank(commodityId) && quantity > 0 && !StrUtil.isBlank(measurementId) && price > 0){
                 if (StrUtil.isBlank(code)){
@@ -78,13 +76,15 @@ public class PurchaseController {
 //                }
 
                 purchaseRepository.save(purchase);
-                return true;
+                session.setAttribute("successInsertPur","保存成功！");
             } else {
-                return false;
+                session.setAttribute("errorInsertPur","保存失敗！");
             }
+            return "purchaseCard";
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            session.setAttribute("errorInsertPur","保存失敗！");
+            return "purchaseCard";
         }
     }
 
@@ -147,7 +147,11 @@ public class PurchaseController {
      * @return
      */
     @RequestMapping("purchaseCard")
-    public String purchaseCard(){
+    public String purchaseCard(HttpSession session){
+        Iterable<Commodity> commodities = commodityRepository.findAll();
+        Iterable<Measurement> measurements = measurementRepository.findAll();
+        session.setAttribute("measurement", measurements);
+        session.setAttribute("commodity", commodities);
         return "purchaseCard";
     }
 }
