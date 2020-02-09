@@ -99,7 +99,7 @@ public class CommodityController {
      * @return
      */
     @RequestMapping(value = "deleteCommodity")
-    public boolean deleteCommodity(String comName){
+    public String deleteCommodity(String comName){
         try {
             List<Commodity> commodityList = commodityRepository.findByComName(comName);
 
@@ -107,10 +107,10 @@ public class CommodityController {
                 commodityRepository.delete(commodity);
             }
 
-            return true;
+            return "commodityList";
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return "commodityList";
         }
     }
 

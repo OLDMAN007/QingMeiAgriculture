@@ -81,6 +81,7 @@
                 <th>商品單價</th>
                 <th>商品備註</th>
                 <th>商品狀態</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
@@ -93,6 +94,11 @@
                 <td th:text="${info.price}"></td>
                 <td th:text="${info.note}"></td>
                 <td th:text="${info.status.name}"></td>
+                <td>
+                    <form action="deleteCommodity" method="get">
+                        <button class="btn btn-danger" type="submit" th:value="${info.id}">刪除</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

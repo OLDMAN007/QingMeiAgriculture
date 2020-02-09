@@ -77,6 +77,7 @@
                 <th>姓名</th>
                 <th>電話</th>
                 <th>地址</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
@@ -85,6 +86,7 @@
                 <td th:text="${info.cusName}"></td>
                 <td th:text="${info.telephone}"></td>
                 <td th:text="${info.address}"></td>
+                <td><a href="deleteCustomer?id=${info.id}" role="button" class="btn btn-danger">刪除</a></td>
             </tr>
             </tbody>
         </table>

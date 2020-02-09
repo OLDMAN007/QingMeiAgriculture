@@ -81,7 +81,7 @@ public class CustomerController {
      * @return
      */
     @RequestMapping(value = "deleteCustomer")
-    public boolean deleteCustomer(String name){
+    public String deleteCustomer(String name){
         try {
             List<Customer> customerList = customerRepository.findByCusName(name);
 
@@ -89,10 +89,10 @@ public class CustomerController {
                 customerRepository.delete(customer);
             }
 
-            return true;
+            return "customerList";
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return "customerList";
         }
     }
 
