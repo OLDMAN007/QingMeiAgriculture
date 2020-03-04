@@ -16,7 +16,8 @@ import javax.servlet.http.HttpSession;
  * @version 0.0.1
  * @date 2020/2/4
  */
-@Controller
+@RestController
+//@Controller
 public class UserController {
     final
     UserRepository userRepository;
@@ -32,41 +33,38 @@ public class UserController {
      * @return
      */
     @PostMapping("/loginPost")
-    public String loginPost(String userName, String passWord, HttpSession session){
+    public User loginPost(String userName, String passWord){
         try {
             User user = userRepository.findByUserNameAndPassWord(userName, passWord);
             if( user != null){
-                session.setAttribute("user", user);
-                return "index";
+                return user;
             } else {
-                session.setAttribute("loginMessage","用戶名或密碼錯誤！");
-                return "login";
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("loginMessage","用戶名或密碼錯誤！");
 //            return "redirect:login";
-            return "login";
+            return null;
         }
     }
 
-    /**
-     * 返回主頁
-     * @return
-     */
-    @GetMapping("index")
-    public String index(){
-        return "index";
-    }
-
-    /**
-     *
-     * @return
-     */
-    @GetMapping("login")
-    public String login(){
-        return "login";
-    }
+//    /**
+//     * 返回主頁
+//     * @return
+//     */
+//    @GetMapping("index")
+//    public String index(){
+//        return "index";
+//    }
+//
+//    /**
+//     *
+//     * @return
+//     */
+//    @GetMapping("login")
+//    public String login(){
+//        return "login";
+//    }
 
 
 }

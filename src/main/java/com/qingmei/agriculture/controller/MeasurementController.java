@@ -21,7 +21,8 @@ import java.util.List;
  * @version 0.0.1
  * @date 2020/2/3
  */
-@Controller
+@RestController
+//@Controller
 public class MeasurementController {
 
     final
@@ -38,20 +39,17 @@ public class MeasurementController {
      * @return
      */
     @RequestMapping(value = "insertMeasurement")
-    public String insertMeasurement(String code, String name, HttpSession session){
+    public boolean insertMeasurement(String code, String name){
         try {
             if (!StrUtil.isBlank(name)){
                 if (StrUtil.isBlank(code)) code = name;
                 measurementRepository.save(new Measurement(code, name));
-                session.setAttribute("successMea", "保存成功！");
-            } else {
-                session.setAttribute("errorMea", "保存失敗！");
+                return true;
             }
-            return "measurementCard";
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("errorMea", "保存失敗！");
-            return "measurementCard";
+            return false;
         }
     }
 
@@ -60,11 +58,10 @@ public class MeasurementController {
      * @return
      */
     @RequestMapping(value = "findAllMeasurement")
-    public String findAllMeasurement(HttpSession session){
+    public Iterable<Measurement> findAllMeasurement(){
         try {
             Iterable<Measurement> measurements = measurementRepository.findAll();
-            session.setAttribute("measurement", measurements);
-            return "measurementList";
+            return measurements;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -125,12 +122,12 @@ public class MeasurementController {
 
     }
 
-    /**
-     *
-     * @return
-     */
-    @GetMapping("measurementCard")
-    public String measurementCard(){
-        return "measurementCard";
-    }
+//    /**
+//     *
+//     * @return
+//     */
+//    @GetMapping("measurementCard")
+//    public String measurementCard(){
+//        return "measurementCard";
+//    }
 }

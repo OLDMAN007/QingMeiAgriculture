@@ -24,7 +24,8 @@ import java.util.UUID;
  * @version 0.0.1
  * @date 2020/2/3
  */
-@Controller
+@RestController
+//@Controller
 public class SaleController {
     final
     SaleRepository saleRepository;
@@ -53,7 +54,7 @@ public class SaleController {
      * @return
      */
     @RequestMapping(value = "insertSale")
-    public String insertSale(String code, String commodityId, int quantity, int price, String customerId, String measurementId, HttpSession session){
+    public boolean insertSale(String code, String commodityId, int quantity, int price, String customerId, String measurementId){
         try {
             if (!StrUtil.isBlank(commodityId) && quantity > 0 && price > 0 && !StrUtil.isBlank(customerId) && !StrUtil.isBlank(measurementId)){
                 if (StrUtil.isBlank(code)){
@@ -78,16 +79,13 @@ public class SaleController {
 //                }
 
                 saleRepository.save(sale);
-                session.setAttribute("successInsertSale", "保存成功！");
-                return "saleCard";
+                return true;
             } else {
-                session.setAttribute("errorInsertSale", "保存失敗！");
-                return "saleCard";
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("errorInsertSale", "保存失敗！");
-            return "saleCard";
+            return false;
         }
     }
 
@@ -123,7 +121,7 @@ public class SaleController {
      * @return
      */
     @RequestMapping(value = "findAllSale")
-    public String findAllSale(HttpSession session){
+    public Iterable<Sale> findAllSale(){
         Iterable<Sale> sales = saleRepository.findAll();
         Iterable<Commodity> commodities = commodityRepository.findAll();
         Iterable<Customer> customers = customerRepository.findAll();
@@ -147,22 +145,21 @@ public class SaleController {
             }
         }
 
-        session.setAttribute("sale", sales);
-        return "saleList";
+        return sales;
     }
 
-    /**
-     *
-     * @return
-     */
-    @RequestMapping("saleCard")
-    public String saleCard(HttpSession session){
-        Iterable<Commodity> commodities = commodityRepository.findAll();
-        Iterable<Measurement> measurements = measurementRepository.findAll();
-        Iterable<Customer> customers = customerRepository.findAll();
-        session.setAttribute("measurement", measurements);
-        session.setAttribute("commodity", commodities);
-        session.setAttribute("customer", customers);
-        return "saleCard";
-    }
+//    /**
+//     *
+//     * @return
+//     */
+//    @RequestMapping("saleCard")
+//    public String saleCard(HttpSession session){
+//        Iterable<Commodity> commodities = commodityRepository.findAll();
+//        Iterable<Measurement> measurements = measurementRepository.findAll();
+//        Iterable<Customer> customers = customerRepository.findAll();
+//        session.setAttribute("measurement", measurements);
+//        session.setAttribute("commodity", commodities);
+//        session.setAttribute("customer", customers);
+//        return "saleCard";
+//    }
 }

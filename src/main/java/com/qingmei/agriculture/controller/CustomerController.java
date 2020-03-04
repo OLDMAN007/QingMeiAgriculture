@@ -6,6 +6,7 @@ import com.qingmei.agriculture.repository.CustomerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -20,8 +21,8 @@ import java.util.UUID;
  * @version 0.0.1
  * @date 2020/2/3
  */
-//@RestController
-@Controller
+@RestController
+//@Controller
 public class CustomerController {
     final
     CustomerRepository customerRepository;
@@ -39,22 +40,19 @@ public class CustomerController {
      * @return
      */
     @GetMapping("insertCustomer")
-    public String insertCustomer(String cusCode, String cusName, String telephone, String address, HttpSession session){
+    public boolean insertCustomer(String cusCode, String cusName, String telephone, String address){
         try {
             if (!StrUtil.isBlank(cusName) && !StrUtil.isBlank(telephone)){
                 if(StrUtil.isBlank(cusCode)) cusCode = cusName;
 
                 customerRepository.save(new Customer(UUID.randomUUID().toString(),cusCode,cusName,telephone,address));
 
-                session.setAttribute("successCus", "保存成功！");
-            } else {
-                session.setAttribute("errorCus", "保存失敗！");
+                return true;
             }
-            return "customerCard";
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("errorCus", "保存失敗！");
-            return "customerCard";
+            return false;
         }
     }
 
@@ -63,12 +61,11 @@ public class CustomerController {
      * @return
      */
     @GetMapping("findAllCustomer")
-    public String findAllCustomer(HttpSession session){
+    public Iterable<Customer> findAllCustomer(){
         try {
             Iterable<Customer> customerIterable = customerRepository.findAll();
-            session.setAttribute("customer", customerIterable);
 
-            return "customerList";
+            return customerIterable;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -81,7 +78,7 @@ public class CustomerController {
      * @return
      */
     @RequestMapping(value = "deleteCustomer")
-    public String deleteCustomer(String name){
+    public boolean deleteCustomer(String name){
         try {
             List<Customer> customerList = customerRepository.findByCusName(name);
 
@@ -89,10 +86,10 @@ public class CustomerController {
                 customerRepository.delete(customer);
             }
 
-            return "customerList";
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return "customerList";
+            return false;
         }
     }
 
@@ -128,12 +125,12 @@ public class CustomerController {
         }
     }
 
-    /**
-     *
-     * @return
-     */
-    @RequestMapping("customerCard")
-    public String customerCard(){
-        return "customerCard";
-    }
+//    /**
+//     *
+//     * @return
+//     */
+//    @RequestMapping("customerCard")
+//    public String customerCard(){
+//        return "customerCard";
+//    }
 }

@@ -11,6 +11,7 @@ import com.qingmei.agriculture.repository.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -26,8 +27,8 @@ import java.util.UUID;
  * @date 2020/2/3
  *
  */
-//@RestController
-@Controller
+@RestController
+//@Controlleler
 public class CommodityController {
     final
     CommodityRepository commodityRepository;
@@ -52,7 +53,7 @@ public class CommodityController {
      * @return
      */
     @RequestMapping(value = "insertCommodity")
-    public String insertCommodity(String comCode, String comName, int kind, int quantity, String measurement, int price, String note, int status, HttpSession session){
+    public boolean insertCommodity(String comCode, String comName, int kind, int quantity, String measurement, int price, String note, int status){
         try {
             if (!StrUtil.isBlank(comName) && quantity >= 0 && !StrUtil.isBlank(measurement) && price > 0){
                 if (StrUtil.isBlank(comCode)) comCode = comName;
@@ -82,15 +83,13 @@ public class CommodityController {
 
                 commodityRepository.save(commodity);
 
-                session.setAttribute("successCom", "保存成功！");
-            } else {
-                session.setAttribute("errorCom", "保存失敗！");
+                return true;
             }
-            return "commodityCard";
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("errorCom", "保存失敗！");
-            return "commodityCard";
+
+            return false;
         }
     }
 
@@ -100,7 +99,7 @@ public class CommodityController {
      * @return
      */
     @RequestMapping(value = "deleteCommodity")
-    public String deleteCommodity(String comName){
+    public boolean deleteCommodity(String comName){
         try {
             List<Commodity> commodityList = commodityRepository.findByComName(comName);
 
@@ -108,10 +107,10 @@ public class CommodityController {
                 commodityRepository.delete(commodity);
             }
 
-            return "commodityList";
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return "commodityList";
+            return false;
         }
     }
 
@@ -120,7 +119,7 @@ public class CommodityController {
      * @return
      */
     @RequestMapping(value = "findAllCommodity")
-    public String findAllCommodity(HttpSession session){
+    public Iterable<Commodity> findAllCommodity(){
         Iterable<Commodity> commodities = commodityRepository.findAll();
         Iterable<Measurement> measurements = measurementRepository.findAll();
 
@@ -131,8 +130,8 @@ public class CommodityController {
                 }
             }
         }
-        session.setAttribute("commodity", commodities);
-        return "commodityList";
+
+        return commodities;
     }
 
     /**
@@ -182,14 +181,14 @@ public class CommodityController {
         }
     }
 
-    /**
-     *
-     * @return
-     */
-    @RequestMapping("commodityCard")
-    public String commodityCard(HttpSession session){
-        Iterable<Measurement> measurements = measurementRepository.findAll();
-        session.setAttribute("measurement", measurements);
-        return "commodityCard";
-    }
+//    /**
+//     *
+//     * @return
+//     */
+//    @RequestMapping("commodityCard")
+//    public String commodityCard(HttpSession session){
+//        Iterable<Measurement> measurements = measurementRepository.findAll();
+//        session.setAttribute("measurement", measurements);
+//        return "commodityCard";
+//    }
 }
